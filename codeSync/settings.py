@@ -80,7 +80,8 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
-    'codesyncbackend.onrender.com'
+    'codesyncbackend.onrender.com',
+    "http://localhost:3000",
 ]
 
 
