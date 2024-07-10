@@ -80,7 +80,7 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
-    'https://codesyncbackend.onrender.com'
+    'codesyncbackend.onrender.com'
 ]
 
 
