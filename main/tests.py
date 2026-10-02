@@ -1,4 +1,5 @@
 import json
+import zlib
 
 from channels.testing import WebsocketCommunicator
 from django.test import TransactionTestCase
@@ -65,7 +66,9 @@ class CollabTests(TransactionTestCase):
         await a.pump()
         await a.disconnect()  # last one out: state is flushed to the DB
 
-        self.assertTrue(await RoomDocument.objects.filter(room='r2').aexists())
+        row = await RoomDocument.objects.aget(room='r2')
+        self.assertTrue(row.compressed)
+        zlib.decompress(bytes(row.state))  # stored deflated
         self.assertNotIn('r2', rooms._rooms)
 
         b = Client('r2')
@@ -104,3 +107,14 @@ class CollabTests(TransactionTestCase):
         await a.ws.send_to(bytes_data=bytes([0, 2, 3, 255, 255, 255]))
         out = await a.ws.receive_output(timeout=1)
         self.assertEqual(out['type'], 'websocket.close')
+
+    async def test_rows_saved_before_compression_still_load(self):
+        doc = Doc()
+        text = doc.get('codemirror', type=Text)
+        text += 'legacy code'
+        await RoomDocument.objects.acreate(room='old', state=doc.get_update(), compressed=False)
+
+        b = Client('old')
+        await b.connect()
+        self.assertEqual(str(b.text), 'legacy code')
+        await b.disconnect()

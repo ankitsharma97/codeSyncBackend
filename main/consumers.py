@@ -8,7 +8,7 @@ from . import awareness, rooms
 
 logger = logging.getLogger(__name__)
 
-MAX_MESSAGE_BYTES = 1024 * 1024
+MAX_MESSAGE_BYTES = 2 * 1024 * 1024
 _UPDATES = (YSyncMessageType.SYNC_STEP2, YSyncMessageType.SYNC_UPDATE)
 
 

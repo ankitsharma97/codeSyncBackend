@@ -6,6 +6,7 @@ class RoomDocument(models.Model):
 
     room = models.CharField(max_length=64, unique=True)
     state = models.BinaryField()
+    compressed = models.BooleanField(default=False)  # rows saved before compression hold raw updates
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

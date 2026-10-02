@@ -35,7 +35,6 @@ WS_ALLOWED_ORIGINS = os.environ.get('WS_ALLOWED_ORIGINS', '*').split(',')
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'channels',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -87,7 +86,7 @@ ASGI_APPLICATION = 'codeSync.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.environ.get('SQLITE_PATH', BASE_DIR / 'db.sqlite3'),
     }
 }
 

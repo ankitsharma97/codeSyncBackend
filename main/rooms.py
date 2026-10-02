@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import zlib
 
 from channels.db import database_sync_to_async
 from django.utils import timezone
@@ -73,7 +74,8 @@ class Room:
 @database_sync_to_async
 def _store(name, state):
     RoomDocument.objects.update_or_create(
-        room=name, defaults={'state': state, 'updated_at': timezone.now()}
+        room=name,
+        defaults={'state': zlib.compress(state, 6), 'compressed': True, 'updated_at': timezone.now()},
     )
 
 
@@ -82,7 +84,8 @@ def _load(name):
     doc = Doc()
     row = RoomDocument.objects.filter(room=name).first()
     if row is not None:
-        doc.apply_update(bytes(row.state))
+        state = bytes(row.state)
+        doc.apply_update(zlib.decompress(state) if row.compressed else state)
     return doc
 
 

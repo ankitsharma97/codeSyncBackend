@@ -1,6 +1,7 @@
 channels==4.1.0
 channels-redis==4.2.0
-daphne==4.1.2
 Django==4.2.13
 pycrdt>=0.12.36,<0.13; python_version < "3.10"
 pycrdt==0.14.8; python_version >= "3.10"
+uvicorn==0.39.0; python_version >= "3.9"
+websockets==15.0.1
