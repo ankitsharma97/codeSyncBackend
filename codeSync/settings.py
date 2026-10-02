@@ -58,6 +58,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'codeSync.urls'
 
+# git pushes through /git-proxy/ can carry a sizeable pack (the view enforces its own cap).
+DATA_UPLOAD_MAX_MEMORY_SIZE = 26 * 1024 * 1024
+
 
 
 TEMPLATES = [

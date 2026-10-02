@@ -18,7 +18,10 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.urls import path
 
+from main.gitproxy import git_proxy
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health', lambda request: HttpResponse('ok')),
+    path('git-proxy/<path:target>', git_proxy),
 ]
