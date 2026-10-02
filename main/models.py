@@ -1,10 +1,12 @@
 from django.db import models
 
-# Create your models here.
 
-class GroupUser(models.Model):
-    group_id = models.CharField(max_length=50)
-    user_id = models.CharField(max_length=50)
+class RoomDocument(models.Model):
+    """Persisted Yjs state of a room, so a document survives everyone leaving."""
+
+    room = models.CharField(max_length=64, unique=True)
+    state = models.BinaryField()
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.group_id
+        return self.room

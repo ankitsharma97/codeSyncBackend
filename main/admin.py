@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import RoomDocument
+
+
+@admin.register(RoomDocument)
+class RoomDocumentAdmin(admin.ModelAdmin):
+    list_display = ('room', 'updated_at')

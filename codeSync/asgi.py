@@ -1,28 +1,20 @@
-"""
-ASGI config for codeSync project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
-"""
+"""ASGI entrypoint: plain HTTP via Django, WebSockets via Channels."""
 
 import os
-from channels.routing import ProtocolTypeRouter, URLRouter
+
+from django.conf import settings
 from django.core.asgi import get_asgi_application
-from channels.auth import AuthMiddlewareStack
-from main.routing import ws_urlpatterns
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'codeSync.settings')
 
-application = get_asgi_application()
+django_asgi_app = get_asgi_application()
+
+from channels.routing import ProtocolTypeRouter, URLRouter  # noqa: E402
+from channels.security.websocket import OriginValidator  # noqa: E402
+
+from main.routing import ws_urlpatterns  # noqa: E402
 
 application = ProtocolTypeRouter({
-    "http": application,
-    "websocket": AuthMiddlewareStack(
-        URLRouter(
-            ws_urlpatterns
-        )
-    ),
+    'http': django_asgi_app,
+    'websocket': OriginValidator(URLRouter(ws_urlpatterns), settings.WS_ALLOWED_ORIGINS),
 })
-
