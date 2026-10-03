@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
-import dj_database_url
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -90,6 +88,8 @@ ASGI_APPLICATION = 'codeSync.asgi.application'
 
 # DATABASE_URL (e.g. postgres://user:pass@host:5432/dbname) selects Postgres; otherwise SQLite for local dev.
 if os.environ.get('DATABASE_URL'):
+    import dj_database_url  # only needed (and imported) when Postgres is configured
+
     DATABASES = {'default': dj_database_url.parse(os.environ['DATABASE_URL'], conn_max_age=600)}
 else:
     DATABASES = {
