@@ -15,13 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.http import HttpResponse
 from django.urls import path
 
 from main.gitproxy import git_proxy
+from main.healthcheck import health, ping
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('health', lambda request: HttpResponse('ok')),
+    path('health', health),
+    path('ping', ping),
     path('git-proxy/<path:target>', git_proxy),
 ]
